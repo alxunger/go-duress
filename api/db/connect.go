@@ -18,3 +18,8 @@ func Connect() {
 		fmt.Println("connection with database `duress` established")
 	}
 }
+
+// CountCodes return the number of total duress codes
+func CountCodes() int {
+	return 42
+}
