@@ -10,7 +10,6 @@ import (
 
 var conn *sql.DB
 
-// InitDB establishes a connection with the default database
 func InitDB() {
 	var err error
 	conn, err = sql.Open("postgres", "user=duress dbname=duress sslmode=disable")
@@ -25,7 +24,6 @@ func InitDB() {
 	}
 }
 
-// TotalCodes return the number of total duress codes
 func TotalCodes() int64 {
 	var ret int64
 	var err error
@@ -34,11 +32,7 @@ func TotalCodes() int64 {
 	if err != nil {
 		log.Panic(`Error running the specified query`)
 	}
-	defer rows.Close()
 
-	for rows.Next() {
-		rows.Scan(&ret)
-	}
-
+	YieldSingleRow(rows, &ret)
 	return ret
 }

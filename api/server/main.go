@@ -1,36 +1,18 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
-	"strconv"
-	"time"
 
 	"github.com/alxunger/go-duress/api/db"
+	"github.com/alxunger/go-duress/api/server/handlers"
 	"github.com/gorilla/mux"
 )
-
-// TODO export handlers to its own package
-
-// HandleDuress sends an OK header from the server
-func HandleDuress(w http.ResponseWriter, req *http.Request) {
-	start := time.Now()
-	vars := mux.Vars(req)
-	fmt.Printf("duress check on [%s_%s] [%v]\n", vars["clientID"], vars["duressCode"], time.Since(start))
-	w.WriteHeader(200)
-}
-
-// HandleCount counts the total number of codes stored
-func HandleCount(w http.ResponseWriter, req *http.Request) {
-	totalCodes := db.TotalCodes()
-	w.Write([]byte(strconv.Itoa(int(totalCodes))))
-}
 
 func main() {
 	db.InitDB()
 	r := mux.NewRouter()
-	r.HandleFunc("/client/{clientID}/code/{duressCode}", HandleDuress)
-	r.HandleFunc("/countCodes", HandleCount)
+	r.HandleFunc("/client/{clientID}/code/{duressCode}", handlers.HandleDuress)
+	r.HandleFunc("/countCodes", handlers.HandleCount)
 	log.Fatal(http.ListenAndServe(":8000", r))
 }
