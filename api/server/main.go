@@ -23,12 +23,12 @@ func HandleDuress(w http.ResponseWriter, req *http.Request) {
 
 // HandleCount counts the total number of codes stored
 func HandleCount(w http.ResponseWriter, req *http.Request) {
-	totalCodes := db.CountCodes()
-	w.Write([]byte(strconv.Itoa(totalCodes)))
+	totalCodes := db.TotalCodes()
+	w.Write([]byte(strconv.Itoa(int(totalCodes))))
 }
 
 func main() {
-	db.Connect()
+	db.InitDB()
 	r := mux.NewRouter()
 	r.HandleFunc("/client/{clientID}/code/{duressCode}", HandleDuress)
 	r.HandleFunc("/countCodes", HandleCount)
